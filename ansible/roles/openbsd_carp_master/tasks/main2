@@ -1,0 +1,47 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for openbsd_carp_master
+
+- name: Utwórz interfejs carp0 jeśli nie istnieje
+  ansible.builtin.command:
+    cmd: ifconfig carp0 create
+  ignore_errors: yes
+
+- name: Pobierz konfigurację carp0
+  ansible.builtin.command:
+    cmd: ifconfig carp0
+  register: carp0_ifconfig
+  changed_when: false
+
+- name: Wyciągnij parametry z ifconfig carp0
+  ansible.builtin.set_fact:
+    carp_current:
+      inet: "{{ (carp0_ifconfig.stdout | regex_search('inet ([0-9\\.]+)', '\\1')) | default('') }}"
+      netmask: "{{ (carp0_ifconfig.stdout | regex_search('netmask ([0-9\\.]+)', '\\1')) | default('') }}"
+      vhid: "{{ (carp0_ifconfig.stdout | regex_search('vhid ([0-9]+)', '\\1')) | default('') }}"
+      carpdev: "{{ (carp0_ifconfig.stdout | regex_search('carpdev ([^\\s]+)', '\\1')) | default('') }}"
+      advskew: "{{ (carp0_ifconfig.stdout | regex_search('advskew ([0-9]+)', '\\1')) | default('') }}"
+
+- name: Konfiguruj CARP tylko jeśli zmieniono coś
+  ansible.builtin.command:
+    cmd: >
+      ifconfig carp0 inet {{ carp_vip }} netmask {{ carp_subnet }}
+      vhid {{ carp_vhid }} pass {{ carp_pass }} carpdev {{ carpdev_interface }}
+      advskew {{ carp_advskew }} up
+  when: >
+    carp_current.inet != carp_vip
+    or carp_current.netmask != carp_subnet
+    or carp_current.vhid != carp_vhid|string
+    or carp_current.carpdev != carpdev_interface
+    or carp_current.advskew != carp_advskew|string
+  changed_when: true
+
+
+- name: Create configuration
+  ansible.builtin.template:
+    src: hostname.carp0.j2
+    dest: /etc/hostname.carp0
+    owner: root
+    group: wheel
+    mode: '0644'
+

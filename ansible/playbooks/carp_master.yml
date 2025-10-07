@@ -1,0 +1,4 @@
+- hosts: haproxy1
+  roles:
+    #- haproxy
+    - openbsd_carp_master

@@ -1,0 +1,19 @@
+global
+    daemon
+    maxconn 256
+
+defaults
+    mode http
+    timeout connect 5000ms
+    timeout client  50000ms
+    timeout server  50000ms
+
+frontend http-in
+    bind *:{{ haproxy_listen_port }}
+    default_backend servers
+
+backend servers
+{% for backend in haproxy_backend_servers %}
+    server {{ backend.name }} {{ backend.address }}:{{ backend.port }} check
+{% endfor %}
+

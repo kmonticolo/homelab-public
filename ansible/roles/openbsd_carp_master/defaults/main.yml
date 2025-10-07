@@ -1,0 +1,8 @@
+#SPDX-License-Identifier: MIT-0
+---
+# defaults file for openbsd_carp_master
+carp_interface: carp0
+carp_vhid: 1
+carp_pass: "supersecret"  # identyczne w master/slave
+carp_advskew: 50
+

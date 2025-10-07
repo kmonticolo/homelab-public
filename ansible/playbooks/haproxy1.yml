@@ -1,0 +1,5 @@
+#- import_playbook: set_host.yml
+
+- hosts: haproxy1
+  roles:
+    - haproxy

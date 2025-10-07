@@ -1,0 +1,8 @@
+#SPDX-License-Identifier: MIT-0
+---
+# vars file for openbsd_carp_master
+carpdev_interface: "vio0"
+carp_vip: "192.168.0.12"
+carp_bcast: "192.168.0.255"
+carp_subnet: "255.255.255.0"
+

@@ -1,0 +1,30 @@
+- name: Install haproxy
+  ansible.builtin.command: pkg_add haproxy
+  args:
+    creates: /usr/local/sbin/haproxy
+
+- name: Ensure haproxy configuration directory exists
+  ansible.builtin.file:
+    path: /etc/haproxy
+    state: directory
+    mode: '0755'
+
+- name: Deploy haproxy.cfg
+  ansible.builtin.template:
+    src: haproxy.cfg.j2
+    dest: /etc/haproxy/haproxy.cfg
+    mode: '0644'
+  notify: Restart haproxy
+
+- name: Enable haproxy in rc.conf.local
+  ansible.builtin.lineinfile:
+    path: /etc/rc.conf.local
+    line: 'haproxy_flags=""'
+    create: yes
+
+- name: Start haproxy service
+  ansible.builtin.service:
+    name: haproxy
+    state: started
+    enabled: yes
+

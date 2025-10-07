@@ -1,0 +1,2 @@
+traefik_certificates_resolver: letsencrypt
+traefik_acme_email: tadeker@onet.pl

@@ -1,0 +1,36 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for openbsd_carp_master
+
+- name: Pobierz konfigurację carp0
+  ansible.builtin.command:
+    cmd: ifconfig carp0
+  register: carp0_ifconfig
+  changed_when: false
+
+- name: Wyciągnij parametry z ifconfig carp0
+  ansible.builtin.set_fact:
+    carp_current:
+      inet: "{{ (carp0_ifconfig.stdout | regex_search('inet ([0-9\\.]+)', '\\1')) | default('') }}"
+      netmask: "{{ (carp0_ifconfig.stdout | regex_search('netmask ([0-9\\.]+)', '\\1')) | default('') }}"
+      vhid: "{{ (carp0_ifconfig.stdout | regex_search('vhid ([0-9]+)', '\\1')) | default('') }}"
+      carpdev: "{{ (carp0_ifconfig.stdout | regex_search('carpdev ([^\\s]+)', '\\1')) | default('') }}"
+      advskew: "{{ (carp0_ifconfig.stdout | regex_search('advskew ([0-9]+)', '\\1')) | default('') }}"
+
+- name: Konfiguruj CARP tylko jeśli zmieniono coś
+  ansible.builtin.command:
+    cmd: >
+      ifconfig carp0 inet {{ carp_vip }} netmask {{ carp_subnet }}
+      vhid {{ carp_vhid }} pass {{ carp_pass }} carpdev {{ carpdev_interface }}
+      advskew {{ carp_advskew }} up
+
+
+
+- name: Create configuration
+  ansible.builtin.template:
+    src: hostname.carp0.j2
+    dest: /etc/hostname.carp0
+    owner: root
+    group: wheel
+    mode: '0644'
+

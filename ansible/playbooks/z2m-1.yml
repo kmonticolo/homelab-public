@@ -1,0 +1,12 @@
+- import_playbook: set_host.yml
+
+- hosts: z2m-1
+  roles:
+    - apt_proxy
+
+    - security
+
+    - docker
+    - z2m
+
+    - promtail
