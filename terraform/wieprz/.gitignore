@@ -2,3 +2,4 @@ default.tfstate
 *backup
 terraform_sync.log
 skrypt/main.tf
+__pycache__
