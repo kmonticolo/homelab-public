@@ -59,7 +59,7 @@ variable "ssh_public_keys" {
 
 variable "nameserver" {
   type    = string
-  default = null
+  default = "192.168.0.11"
 }
 
 variable "network_name" {
@@ -79,7 +79,7 @@ variable "network_ip" {
 
 variable "network_gw" {
   type    = string
-  default = null
+  default = "192.168.0.1"
 }
 
 variable "network_tag" {
@@ -89,12 +89,12 @@ variable "network_tag" {
 
 variable "rootfs_storage" {
   type    = string
-  default = "pool0"
+  default = "local"
 }
 
 variable "rootfs_size" {
   type    = string
-  default = "10G"
+  default = "5G"
 }
 
 variable "features_nesting" {

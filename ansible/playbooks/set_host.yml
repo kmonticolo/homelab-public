@@ -1,0 +1,31 @@
+# zastepstwo dla niedzialajacego compose w dynamicznym inventory
+- name: Set ansible_host from proxmox inventory
+  hosts: all
+  gather_facts: false
+  tasks:
+
+    - name: Get ip from dynamic inventory
+      ansible.builtin.set_fact:
+        ansible_host: >-
+          {{
+            (hostvars[inventory_hostname]['proxmox_net0']['ip'] | regex_replace('/.*', ''))
+            if ('proxmox_net0' in hostvars[inventory_hostname]
+                and 'ip' in hostvars[inventory_hostname]['proxmox_net0'])
+            else (
+              hostvars[inventory_hostname]['proxmox_lxc_interfaces']
+              | selectattr('name', 'equalto', 'eth0')
+              | map(attribute='inet')
+              | list
+              | first
+              | regex_replace('/.*', '')
+            )
+          }}
+
+    - name: Show binded IP
+      ansible.builtin.debug:
+        var: ansible_host
+
+    - name: Wait for connection
+      ansible.builtin.wait_for_connection:
+        delay: 10
+        timeout: 300

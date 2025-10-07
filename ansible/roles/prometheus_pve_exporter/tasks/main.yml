@@ -1,3 +1,8 @@
+- name: Ensure Docker network "monitoring" exists
+  community.docker.docker_network:
+    name: "{{ docker_networks[0].name }}"
+    state: present
+
 - name: Create Prometheus PVE exporter container
   community.docker.docker_container:
     name: prometheus-pve-exporter

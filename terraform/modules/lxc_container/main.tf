@@ -2,7 +2,8 @@ terraform {
   required_providers {
     proxmox = {
       source  = "telmate/proxmox"
-      version = "= 3.0.1-rc8"
+      #version = "= 3.0.1-rc8"
+      version = "3.0.2-rc01"
     }
   }
 }
@@ -28,6 +29,7 @@ resource "proxmox_lxc" "lxc_container" {
   ssh_public_keys = var.ssh_public_keys
 
   nameserver = var.nameserver
+
   network {
     name   = var.network_name
     bridge = var.network_bridge
@@ -63,4 +65,5 @@ resource "proxmox_lxc" "lxc_container" {
   lifecycle {
     ignore_changes = [ostemplate, target_node, hastate]
   }
+
 }

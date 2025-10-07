@@ -49,4 +49,4 @@
 
 - name: Register Jellyfin container name
   ansible.builtin.set_fact:
-    immich_container_name: "jellyfin"
+    jellyfin_container_name: "jellyfin"

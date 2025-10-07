@@ -1,10 +1,10 @@
+- import_playbook: set_host.yml
+
 - hosts: mailrise
   roles:
     - apt_proxy
-
     - security
-
     - docker
     - mailrise
-
     - promtail
+

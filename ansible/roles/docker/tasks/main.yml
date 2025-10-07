@@ -2,6 +2,13 @@
   ansible.builtin.apt:
     name: gpg
 
+- name: Set sysctl
+  ansible.posix.sysctl:
+    name: vm.max_map_count
+    value: '262144'
+    state: present
+  ignore_errors: true
+
 - name: Add Docker repository key
   ansible.builtin.apt_key:
     url: https://download.docker.com/linux/{{ ansible_distribution | lower }}/gpg
@@ -18,8 +25,8 @@
     name: "{{ item }}"
   loop:
     - docker-ce
-    - docker-ce-cli
-    - containerd.io
+    #- docker-ce-cli
+    #- containerd.io
 
 - name: Create Docker network
   community.docker.docker_network:
