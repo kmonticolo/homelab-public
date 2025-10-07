@@ -3,7 +3,8 @@
     - apt_proxy
 
     - security
-    - tailscale
+    - security-updates
+    - tailscale 
 
     - samba
 

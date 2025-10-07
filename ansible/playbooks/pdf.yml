@@ -1,12 +1,11 @@
-- hosts: dev
+- hosts: pdf
   roles:
     - apt_proxy
 
-    - docker
     - security
     - security-updates
-    - tailscale
 
-    - dev
+    - docker
+    - stirling_pdf
 
     - promtail

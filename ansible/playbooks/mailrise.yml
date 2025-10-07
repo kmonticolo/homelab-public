@@ -4,6 +4,7 @@
   roles:
     - apt_proxy
     - security
+    - security-updates
     - docker
     - mailrise
     - promtail

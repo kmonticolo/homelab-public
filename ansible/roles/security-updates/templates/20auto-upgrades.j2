@@ -1,0 +1,5 @@
+APT::Periodic::Update-Package-Lists "{{ security_updates_update_package_lists }}";
+APT::Periodic::Download-Upgradeable-Packages "{{ security_updates_download_upgradeable_packages }}";
+APT::Periodic::AutocleanInterval "{{ security_updates_autoclean_interval }}";
+APT::Periodic::Unattended-Upgrade "{{ security_updates_unattended_upgrade }}";
+
