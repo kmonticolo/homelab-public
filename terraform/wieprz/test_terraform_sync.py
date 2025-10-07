@@ -3,9 +3,6 @@ import subprocess
 import re
 import sys
 
-print("default_password:", os.environ.get("TF_VAR_default_password"))
-print("proxmox_password:", os.environ.get("TF_VAR_proxmox_password"))
-
 def debug_print(label, content):
     print(f"[DEBUG {label}] {content}")
 
@@ -71,7 +68,9 @@ def test_sync_terraform_state():
                 # Format 2: tags = "terraform"
                 str_match = re.search(r'tags\s+=\s+"([^"]+)"', tl)
                 if str_match:
-                    tags = [str_match.group(1)]
+                    tags_str = str_match.group(1)
+                    tags = [tag.strip() for tag in tags_str.split(";") if tag.strip()]
+
 
         #debug_print("PARSED_TAGS", tags)
 

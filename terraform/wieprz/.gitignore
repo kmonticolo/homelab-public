@@ -1,4 +1,5 @@
 default.tfstate
+*.tfstate
 *backup
 terraform_sync.log
 skrypt/main.tf
