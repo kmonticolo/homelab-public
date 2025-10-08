@@ -23,13 +23,20 @@ def test_sync_terraform_state():
     )
     resources = tf_state.stdout.strip().split("\n")
 
+    # Pobierz listę istniejących kontenerów (vmid) z Proxmoxa
+    pct_list = subprocess.run(["pct", "list"], capture_output=True, text=True, check=True)
+    existing_vmids = set()
+    for line in pct_list.stdout.strip().splitlines()[1:]:  # pomijamy nagłówek
+        parts = line.split()
+        if parts:
+            existing_vmids.add(parts[0])  # pierwszy element to vmid jako string
+
     for res in resources:
         match = re.match(r"module\.([a-zA-Z0-9_-]+)\.proxmox_lxc\.lxc_container", res)
         if not match:
             continue
 
         hostname = match.group(1)
-        #debug_print("FOUND", f"hostname = {hostname}, resource = {res}")
 
         # Pobierz szczegóły zasobu ze stanu
         show = subprocess.run(
@@ -37,8 +44,6 @@ def test_sync_terraform_state():
             capture_output=True, text=True
         )
         output = show.stdout
-        #debug_print("STATE_SHOW_OUT", output)
-        #debug_print("STATE_SHOW_ERR", show.stderr)
 
         # Wyciągnij VMID
         vmid_match = re.search(r'vmid\s+=\s+"?(\d+)"?', output)
@@ -47,18 +52,14 @@ def test_sync_terraform_state():
             continue
 
         vmid = vmid_match.group(1)
-        #debug_print("VMID", vmid)
 
         # Wyciągnij tagi
         tags = []
         lines = output.splitlines()
         tag_lines = [line for line in lines if line.strip().startswith("tags")]
-        #debug_print("TAG_LINES", tag_lines)
 
         if tag_lines:
             tl = tag_lines[0].strip()
-            #debug_print("TAG_LINE", tl)
-
             # Format 1: tags = ["terraform"]
             list_match = re.search(r'tags\s+=\s+\[(.*)\]', tl)
             if list_match:
@@ -71,22 +72,12 @@ def test_sync_terraform_state():
                     tags_str = str_match.group(1)
                     tags = [tag.strip() for tag in tags_str.split(";") if tag.strip()]
 
-
-        #debug_print("PARSED_TAGS", tags)
-
         if "terraform" not in tags:
             print(f"[SKIP] VM {vmid} ({hostname}) nie ma tagu 'terraform'")
             continue
 
-        # Sprawdź status kontenera
-        try:
-            status = subprocess.run(["pct", "status", vmid], capture_output=True, text=True, check=True)
-            if "stopped" in status.stdout:
-                print(f"[INFO] VM {vmid} ({hostname}) jest zatrzymana — uruchamiam...")
-                subprocess.run(["pct", "start", vmid], check=True)
-            else:
-                print(f"[OK] VM {vmid} ({hostname}) działa.")
-        except subprocess.CalledProcessError:
+        # Sprawdź, czy VMID istnieje fizycznie (nie używamy pct status!)
+        if vmid not in existing_vmids:
             print(f"[WARN] VM {vmid} ({hostname}) NIE istnieje — usuwam module.{hostname} ze stanu...")
             rm = subprocess.run(
                 ["terraform", "state", "rm", "-state=default.tfstate", f"module.{hostname}"],
@@ -98,6 +89,18 @@ def test_sync_terraform_state():
                 sys.exit(1)
             else:
                 print(f"[OK] Usunięto module.{hostname} ze stanu.")
+            continue
+
+        # VM istnieje — sprawdź, czy działa
+        try:
+            status = subprocess.run(["pct", "status", vmid], capture_output=True, text=True, check=True)
+            if "stopped" in status.stdout:
+                print(f"[INFO] VM {vmid} ({hostname}) jest zatrzymana — uruchamiam...")
+                subprocess.run(["pct", "start", vmid], check=True)
+            else:
+                print(f"[OK] VM {vmid} ({hostname}) działa.")
+        except subprocess.CalledProcessError as e:
+            print(f"[WARN] Nie udało się sprawdzić statusu VM {vmid} ({hostname}): {e.stderr}")
 
     # Na koniec wykonaj terraform apply
     print("[APPLY] Uruchamiam terraform apply -auto-approve...")
@@ -111,4 +114,7 @@ def test_sync_terraform_state():
         sys.exit(1)
     else:
         print("[OK] terraform apply zakończone pomyślnie.")
+
+if __name__ == "__main__":
+    test_sync_terraform_state()
 
