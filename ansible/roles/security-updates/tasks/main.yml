@@ -10,6 +10,7 @@
       - apt-listchanges
     state: present
     update_cache: yes
+  when: ansible_os_family == "Debian"
 
 - name: Enable automatic security updates config
   copy:
@@ -18,6 +19,7 @@
     owner: root
     group: root
     mode: '0644'
+  when: ansible_os_family == "Debian"
 
 - name: Configure unattended-upgrades
   template:
@@ -26,9 +28,11 @@
     owner: root
     group: root
     mode: '0644'
+  when: ansible_os_family == "Debian"
 
 - name: Ensure unattended-upgrades is enabled
   command: dpkg-reconfigure --priority=low unattended-upgrades
   args:
     creates: /etc/apt/apt.conf.d/50unattended-upgrades
+  when: ansible_os_family == "Debian"
 
