@@ -31,6 +31,8 @@ def test_sync_terraform_state():
         if parts:
             existing_vmids.add(parts[0])  # pierwszy element to vmid jako string
 
+    should_apply = False  # flaga czy wykonać terraform apply
+
     for res in resources:
         match = re.match(r"module\.([a-zA-Z0-9_-]+)\.proxmox_lxc\.lxc_container", res)
         if not match:
@@ -39,7 +41,7 @@ def test_sync_terraform_state():
         hostname = match.group(1)
 
         # Pobierz szczegóły zasobu ze stanu
-        show = subprocess.run(
+        show = subprocess.run( 
             ["terraform", "state", "show", "-state=default.tfstate", res],
             capture_output=True, text=True
         )
@@ -76,7 +78,7 @@ def test_sync_terraform_state():
             print(f"[SKIP] VM {vmid} ({hostname}) nie ma tagu 'terraform'")
             continue
 
-        # Sprawdź, czy VMID istnieje fizycznie (nie używamy pct status!)
+        # Sprawdź, czy VMID istnieje fizycznie
         if vmid not in existing_vmids:
             print(f"[WARN] VM {vmid} ({hostname}) NIE istnieje — usuwam module.{hostname} ze stanu...")
             rm = subprocess.run(
@@ -89,6 +91,7 @@ def test_sync_terraform_state():
                 sys.exit(1)
             else:
                 print(f"[OK] Usunięto module.{hostname} ze stanu.")
+                should_apply = True
             continue
 
         # VM istnieje — sprawdź, czy działa
@@ -97,23 +100,27 @@ def test_sync_terraform_state():
             if "stopped" in status.stdout:
                 print(f"[INFO] VM {vmid} ({hostname}) jest zatrzymana — uruchamiam...")
                 subprocess.run(["pct", "start", vmid], check=True)
+                should_apply = True
             else:
                 print(f"[OK] VM {vmid} ({hostname}) działa.")
         except subprocess.CalledProcessError as e:
             print(f"[WARN] Nie udało się sprawdzić statusu VM {vmid} ({hostname}): {e.stderr}")
 
-    # Na koniec wykonaj terraform apply
-    print("[APPLY] Uruchamiam terraform apply -auto-approve...")
-    apply = subprocess.run(
-        ["terraform", "apply", "-auto-approve", "-state=default.tfstate"],
-        capture_output=True, text=True
-    )
-    if apply.returncode != 0:
-        print("[ERROR] Błąd podczas terraform apply:")
-        print(apply.stderr)
-        sys.exit(1)
+    # Wykonaj terraform apply tylko jeśli coś się zmieniło
+    if should_apply:
+        print("[APPLY] Uruchamiam terraform apply -auto-approve...")
+        apply = subprocess.run(
+            ["terraform", "apply", "-auto-approve", "-state=default.tfstate"],
+            capture_output=True, text=True
+        )
+        if apply.returncode != 0:
+            print("[ERROR] Błąd podczas terraform apply:")
+            print(apply.stderr)
+            sys.exit(1)
+        else:
+            print("[OK] terraform apply zakończone pomyślnie.")
     else:
-        print("[OK] terraform apply zakończone pomyślnie.")
+        print("[SKIP] Wszystkie kontenery działają — pomijam terraform apply.")
 
 if __name__ == "__main__":
     test_sync_terraform_state()
