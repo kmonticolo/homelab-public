@@ -2,14 +2,22 @@
 
 - hosts: prometheus
   roles:
-    - apt_proxy
+    - role: apt_proxy
+      tags: [apt, apt_proxy]
 
-    - security
-    - security-updates
+    - role: security
+      tags: [security]
+    - role: security-updates
+      tags: [security]
 
-    - docker
-    - prometheus_pve_exporter
-    - prometheus
+    - role: docker
+      tags: [docker]
+    - role: prometheus_pve_exporter
+      tags: [prometheus]
+    - role: prometheus
+      tags: [prometheus]
 
-    - promtail
-    - goss
+    - role: promtail
+      tags: [promtail]
+    - role: goss
+      tags: [tests, goss]

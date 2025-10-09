@@ -1,0 +1,105 @@
+package:
+    promtail:
+        installed: true
+        versions:
+            - 3.5.3
+port:
+    tcp:9221:
+        listening: true
+        ip:
+            - 0.0.0.0
+    tcp6:9080:
+        listening: true
+        ip:
+            - '::'
+    tcp6:46677:
+        listening: true
+        ip:
+            - '::'
+    udp:44941:
+        listening: true
+        ip:
+            - 127.0.0.1
+service:
+    apparmor.service:
+        enabled: true
+        running: false
+    apt-daily-upgrade.service:
+        enabled: true
+        running: false
+    apt-daily.service:
+        enabled: true
+        running: false
+    container-getty@.service:
+        enabled: true
+        running: false
+    containerd.service:
+        enabled: true
+        running: true
+    cron.service:
+        enabled: true
+        running: true
+    docker.service:
+        enabled: true
+        running: true
+    postfix-resolvconf.service:
+        enabled: true
+        running: false
+    postfix.service:
+        enabled: true
+        running: true
+    promtail:
+        enabled: true
+        running: true
+    promtail.service:
+        enabled: true
+        running: true
+    proxmox-regenerate-snakeoil.service:
+        enabled: true
+        running: false
+    quotaon.service:
+        enabled: true
+        running: false
+    udev.service:
+        enabled: true
+        running: false
+    unattended-upgrades.service:
+        enabled: true
+        running: true
+    urandom.service:
+        enabled: false
+        running: false
+    user-runtime-dir@.service:
+        enabled: true
+        running: false
+    user@.service:
+        enabled: true
+        running: false
+    x11-common.service:
+        enabled: false
+        running: false
+user:
+    promtail:
+        exists: true
+        uid: 103
+        gid: 65534
+        groups:
+            - docker
+            - nogroup
+            - systemd-journal
+        home: /nonexistent
+        shell: /bin/false
+command:
+    docker ps | grep -q prometheus-pve-exporter:latest:
+        exit-status: 0
+        stdout: ""
+        stderr: ""
+        timeout: 10000
+    docker ps | grep -q prometheus:latest:
+        exit-status: 0
+        stdout: ""
+        stderr: ""
+        timeout: 10000
+process:
+    promtail:
+        running: true
