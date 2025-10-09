@@ -8,7 +8,7 @@ if [ "$current_hour" -ge 19 ] && [ "$current_hour" -lt 22 ]; then
   exit 0
 else
 while true; do
-    echo "=== \$(date '+%Y-%m-%d %H:%M:%S') ===" >> terraform_sync.log
+    echo "=== $(date '+%Y-%m-%d %H:%M:%S') ===" >> terraform_sync.log
     pytest -s test_terraform_sync.py >> terraform_sync.log 2>&1
     sleep 60
 done
