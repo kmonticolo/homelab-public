@@ -1,17 +1,13 @@
+- import_playbook: set_host.yml
+
 - hosts: frigate
   roles:
-    - role: apt_proxy
-      tags: [apt, apt_proxy]
+    - apt_proxy
 
-    - role: security
-      tags: security
-    - role: security-updates
-      tags: security
+    - security
+    - security-updates
 
-    - role: docker
-      tags: docker
-    - role: frigate
-      tags: frigate
+    - docker
+    - frigate
 
-    - role: promtail
-      tags: promtail
+    - promtail

@@ -2,18 +2,12 @@
 
 - hosts: apt-cacher
   roles:
-    - role: apt_proxy
-      tags: [apt, apt_proxy]
+    - apt_proxy
 
-    - role: security
-      tags: [security]
-    - role: security-updates
-      tags: [security]
+    - security
+    - security-updates
 
-    - role: apt_cacher
-      tags: [apt, apt-cacher]
+    - apt_cacher
 
-    - role: promtail
-      tags: [promtail]
-    - role: goss
-      tags: [goss, tests]
+    - promtail
+    - goss
