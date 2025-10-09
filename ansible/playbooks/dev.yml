@@ -1,12 +1,19 @@
 - hosts: dev
   roles:
-    - apt_proxy
+    - role: apt_proxy
+      tags: [apt, apt_proxy]
 
-    - docker
-    - security
-    - security-updates
-    - tailscale
+    - role: docker
+      tags: docker
+    - role: security
+      tags: security
+    - role: security-updates
+      tags: security
+    - role: tailscale
+      tags: tailscale
 
-    - dev
+    - role dev
+      tags: dev
 
-    - promtail
+    - role: promtail
+      tags: promtail

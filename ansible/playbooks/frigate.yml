@@ -1,11 +1,17 @@
 - hosts: frigate
   roles:
-    - apt_proxy
+    - role: apt_proxy
+      tags: [apt, apt_proxy]
 
-    - security
-    - security-updates
+    - role: security
+      tags: security
+    - role: security-updates
+      tags: security
 
-    - docker
-    - frigate
+    - role: docker
+      tags: docker
+    - role: frigate
+      tags: frigate
 
-    - promtail
+    - role: promtail
+      tags: promtail

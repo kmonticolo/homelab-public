@@ -2,14 +2,21 @@
 
 - hosts: loki
   roles:
-    - apt_proxy
+    - role: apt_proxy
+      tags: [apt, apt_proxy]
 
-    - security
-    - security-updates
+    - role: security
+      tags: [security]
+    - role: security-updates
+      tags: [security]
 
-    - docker
-    - loki
+    - role: docker
+      tags: [docker]
+    - role: loki
+      tags: [loki]
 
-    - promtail
-    - goss
+    - role: promtail
+      tags: [promtail]
+    - role: goss
+      tags: [tests, goss]
 
