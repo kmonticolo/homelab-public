@@ -150,6 +150,14 @@ module "ansible_vaultwarden" {
   name         = "vaultwarden"
   container_id = module.vaultwarden.container_id
 }
+resource "null_resource" "ansible_vaultwarden" {
+ triggers = {
+    container_id = module.vaultwarden.container_id
+  }
+  provisioner "local-exec" {
+    command = "make vaultwarden"
+  }
+}
 
 #module "dev" {
 #  source = "../modules/lxc_container"
