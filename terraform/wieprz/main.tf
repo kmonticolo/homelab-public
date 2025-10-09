@@ -629,6 +629,7 @@ module "apt-cacher" {
   memory      = 256
   rootfs_storage = "local"
   rootfs_size = "5G"
+  rootfs_storage = "local-lvm"
   network_ip = "192.168.0.39/24"
   unprivileged = true
 }
