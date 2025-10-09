@@ -2,6 +2,11 @@
 ---
 # tasks file for goss
 
+- name: goss | install curl
+  ansible.builtin.package:
+    name: curl
+    state: present
+
 - name: goss | check binary
   ansible.builtin.stat:
     path: /usr/local/bin/goss
