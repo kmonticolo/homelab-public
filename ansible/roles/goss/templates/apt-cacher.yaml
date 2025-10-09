@@ -1,0 +1,405 @@
+file:
+    /etc/apt-cacher-ng/acng.conf:
+        exists: true
+        mode: "0644"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /var/cache/apt-cacher-ng:
+        exists: true
+        mode: "2755"
+        owner: apt-cacher-ng
+        group: apt-cacher-ng
+        filetype: directory
+        contents: []
+    /var/log/apt-cacher-ng/apt-cacher.log:
+        exists: true
+        mode: "0644"
+        owner: apt-cacher-ng
+        group: apt-cacher-ng
+        filetype: file
+        contents: []
+port:
+    tcp:3142:
+        listening: true
+        ip:
+            - 0.0.0.0
+    tcp6:22:
+        listening: true
+        ip:
+            - '::'
+    tcp6:25:
+        listening: true
+        ip:
+            - ::1
+    tcp6:3142:
+        listening: true
+        ip:
+            - '::'
+    tcp6:9080:
+        listening: true
+        ip:
+            - '::'
+    tcp6:46067:
+        listening: true
+        ip:
+            - '::'
+service:
+    apt-cacher-ng.service:
+        enabled: true
+        running: true
+    apt-daily-upgrade.service:
+        enabled: true
+        running: false
+    apt-daily.service:
+        enabled: true
+        running: false
+    autovt@.service:
+        enabled: true
+        running: false
+    console-getty.service:
+        enabled: true
+        running: true
+    container-getty@.service:
+        enabled: true
+        running: false
+    cron.service:
+        enabled: true
+        running: true
+    cryptdisks-early.service:
+        enabled: false
+        running: false
+    cryptdisks.service:
+        enabled: false
+        running: false
+    dbus-org.freedesktop.hostname1.service:
+        enabled: true
+        running: false
+    dbus-org.freedesktop.locale1.service:
+        enabled: true
+        running: false
+    dbus-org.freedesktop.login1.service:
+        enabled: true
+        running: true
+    dbus-org.freedesktop.timedate1.service:
+        enabled: true
+        running: false
+    dbus-org.freedesktop.timesync1.service:
+        enabled: true
+        running: false
+    dbus.service:
+        enabled: true
+        running: true
+    debug-shell.service:
+        enabled: false
+        running: false
+    dpkg-db-backup.service:
+        enabled: true
+        running: false
+    e2scrub@.service:
+        enabled: true
+        running: false
+    e2scrub_all.service:
+        enabled: true
+        running: false
+    e2scrub_fail@.service:
+        enabled: true
+        running: false
+    e2scrub_reap.service:
+        enabled: true
+        running: false
+    emergency.service:
+        enabled: true
+        running: false
+    fstrim.service:
+        enabled: true
+        running: false
+    getty-static.service:
+        enabled: true
+        running: false
+    getty@.service:
+        enabled: false
+        running: false
+    hwclock.service:
+        enabled: false
+        running: false
+    ifup@.service:
+        enabled: true
+        running: false
+    ifupdown-pre.service:
+        enabled: true
+        running: true
+    ifupdown-wait-online.service:
+        enabled: true
+        running: true
+    initrd-cleanup.service:
+        enabled: true
+        running: false
+    initrd-parse-etc.service:
+        enabled: true
+        running: false
+    initrd-switch-root.service:
+        enabled: true
+        running: false
+    initrd-udevadm-cleanup-db.service:
+        enabled: true
+        running: false
+    kmod-static-nodes.service:
+        enabled: true
+        running: false
+    kmod.service:
+        enabled: true
+        running: true
+    logrotate.service:
+        enabled: true
+        running: false
+    man-db.service:
+        enabled: true
+        running: false
+    modprobe@.service:
+        enabled: true
+        running: false
+    networking.service:
+        enabled: true
+        running: true
+    nftables.service:
+        enabled: true
+        running: true
+    pam_namespace.service:
+        enabled: true
+        running: false
+    postfix-resolvconf.service:
+        enabled: true
+        running: false
+    postfix.service:
+        enabled: true
+        running: true
+    postfix@.service:
+        enabled: true
+        running: false
+    procps.service:
+        enabled: true
+        running: true
+    promtail.service:
+        enabled: true
+        running: true
+    proxmox-regenerate-snakeoil.service:
+        enabled: true
+        running: false
+    quotaon.service:
+        enabled: true
+        running: false
+    rc-local.service:
+        enabled: true
+        running: false
+    rc.service:
+        enabled: false
+        running: false
+    rcS.service:
+        enabled: false
+        running: false
+    rescue.service:
+        enabled: true
+        running: false
+    serial-getty@.service:
+        enabled: false
+        running: false
+    ssh.service:
+        enabled: true
+        running: true
+    sshd.service:
+        enabled: true
+        running: true
+    system-update-cleanup.service:
+        enabled: true
+        running: false
+    systemd-ask-password-console.service:
+        enabled: true
+        running: false
+    systemd-ask-password-wall.service:
+        enabled: true
+        running: false
+    systemd-backlight@.service:
+        enabled: true
+        running: false
+    systemd-binfmt.service:
+        enabled: true
+        running: false
+    systemd-boot-check-no-failures.service:
+        enabled: false
+        running: false
+    systemd-exit.service:
+        enabled: true
+        running: false
+    systemd-firstboot.service:
+        enabled: true
+        running: true
+    systemd-fsck-root.service:
+        enabled: true
+        running: false
+    systemd-fsck@.service:
+        enabled: true
+        running: false
+    systemd-fsckd.service:
+        enabled: true
+        running: false
+    systemd-halt.service:
+        enabled: true
+        running: false
+    systemd-hibernate-resume@.service:
+        enabled: true
+        running: false
+    systemd-hibernate.service:
+        enabled: true
+        running: false
+    systemd-hostnamed.service:
+        enabled: true
+        running: false
+    systemd-hybrid-sleep.service:
+        enabled: true
+        running: false
+    systemd-initctl.service:
+        enabled: true
+        running: false
+    systemd-journal-flush.service:
+        enabled: true
+        running: true
+    systemd-journald.service:
+        enabled: true
+        running: true
+    systemd-journald@.service:
+        enabled: true
+        running: false
+    systemd-kexec.service:
+        enabled: true
+        running: false
+    systemd-localed.service:
+        enabled: true
+        running: false
+    systemd-logind.service:
+        enabled: true
+        running: true
+    systemd-machine-id-commit.service:
+        enabled: true
+        running: true
+    systemd-modules-load.service:
+        enabled: true
+        running: true
+    systemd-network-generator.service:
+        enabled: true
+        running: true
+    systemd-networkd-wait-online.service:
+        enabled: false
+        running: false
+    systemd-networkd-wait-online@.service:
+        enabled: false
+        running: false
+    systemd-networkd.service:
+        enabled: false
+        running: true
+    systemd-pcrphase-initrd.service:
+        enabled: true
+        running: false
+    systemd-pcrphase-sysinit.service:
+        enabled: true
+        running: false
+    systemd-pcrphase.service:
+        enabled: true
+        running: false
+    systemd-poweroff.service:
+        enabled: true
+        running: false
+    systemd-pstore.service:
+        enabled: true
+        running: false
+    systemd-quotacheck.service:
+        enabled: true
+        running: false
+    systemd-random-seed.service:
+        enabled: true
+        running: false
+    systemd-reboot.service:
+        enabled: true
+        running: false
+    systemd-remount-fs.service:
+        enabled: true
+        running: true
+    systemd-repart.service:
+        enabled: true
+        running: false
+    systemd-rfkill.service:
+        enabled: true
+        running: false
+    systemd-suspend-then-hibernate.service:
+        enabled: true
+        running: false
+    systemd-suspend.service:
+        enabled: true
+        running: false
+    systemd-sysctl.service:
+        enabled: true
+        running: true
+    systemd-sysext.service:
+        enabled: true
+        running: false
+    systemd-sysusers.service:
+        enabled: true
+        running: true
+    systemd-time-wait-sync.service:
+        enabled: false
+        running: false
+    systemd-timedated.service:
+        enabled: true
+        running: false
+    systemd-timesyncd.service:
+        enabled: true
+        running: false
+    systemd-tmpfiles-clean.service:
+        enabled: true
+        running: false
+    systemd-tmpfiles-setup-dev.service:
+        enabled: true
+        running: true
+    systemd-tmpfiles-setup.service:
+        enabled: true
+        running: true
+    systemd-udev-settle.service:
+        enabled: true
+        running: false
+    systemd-udev-trigger.service:
+        enabled: true
+        running: false
+    systemd-udevd.service:
+        enabled: true
+        running: false
+    systemd-update-utmp-runlevel.service:
+        enabled: true
+        running: false
+    systemd-update-utmp.service:
+        enabled: true
+        running: true
+    systemd-user-sessions.service:
+        enabled: true
+        running: true
+    systemd-volatile-root.service:
+        enabled: true
+        running: false
+    udev.service:
+        enabled: true
+        running: false
+    unattended-upgrades.service:
+        enabled: true
+        running: true
+    urandom.service:
+        enabled: false
+        running: false
+    user-runtime-dir@.service:
+        enabled: true
+        running: false
+    user@.service:
+        enabled: true
+        running: false
+    x11-common.service:
+        enabled: false
+        running: false

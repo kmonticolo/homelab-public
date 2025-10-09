@@ -11,3 +11,5 @@
     - loki
 
     - promtail
+    - goss
+

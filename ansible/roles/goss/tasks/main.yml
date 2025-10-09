@@ -1,0 +1,27 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for goss
+
+- name: goss | check binary
+  ansible.builtin.stat:
+    path: /usr/local/bin/goss
+  register: goss
+
+- name: goss | get installer
+  ansible.builtin.get_url:
+    url: https://goss.rocks/install
+    dest: /tmp/goss_install.sh
+    mode: '0755'
+  when: not goss.stat.exists
+
+- name: goss | run installer
+  ansible.builtin.shell: /tmp/goss_install.sh
+  args:
+    creates: /usr/local/bin/goss
+
+- name: goss | template goss.yaml
+  ansible.builtin.template:
+    src: "{{ ansible_hostname }}.yaml"
+    dest: /root/goss.yaml
+    mode: "0644"
+

@@ -10,3 +10,4 @@
     - apt_cacher
 
     - promtail
+    - goss
