@@ -107,6 +107,14 @@ module "ansible_prometheus" {
   name         = "prometheus"
   container_id = module.prometheus.container_id
 }
+resource "null_resource" "ansible_prometheus" {
+ triggers = {
+    container_id = module.prometheus.container_id
+  }
+  provisioner "local-exec" {
+    command = "make prometheus"
+  }
+}
 
 module "grafana" {
   source = "../modules/lxc_container"
