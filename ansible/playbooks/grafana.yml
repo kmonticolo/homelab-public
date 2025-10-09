@@ -11,3 +11,4 @@
     - grafana
 
     - promtail
+    - goss

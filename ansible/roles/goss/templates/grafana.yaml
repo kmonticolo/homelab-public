@@ -1,0 +1,23 @@
+port:
+    tcp6:9080:
+        listening: true
+        ip:
+            - '::'
+    tcp6:44349:
+        listening: true
+        ip:
+            - '::'
+service:
+    docker:
+        enabled: true
+        running: true
+group:
+    docker:
+        exists: true
+        gid: 996
+command:
+    docker ps |grep -q grafana:latest:
+        exit-status: 0
+        stdout: ""
+        stderr: ""
+        timeout: 10000
