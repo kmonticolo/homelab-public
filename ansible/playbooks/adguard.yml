@@ -2,12 +2,21 @@
 
 - hosts: adguard
   roles:
-    - apt_proxy
+    - role: apt_proxy
+      tags: [apt, proxy]
 
-    - security
-    - security-updates
+    - role: security
+      tags: [security]
+    - role: security-updates
+      tags: [security]
 
-    - docker
-    - adguard
+    - role: docker
+      tags: [docker]
+    - role: adguard
+      tags: [adguard]
 
-    - promtail
+    - role: promtail
+      tags: [promtail, logging]
+
+    - role: goss
+      tags: [goss, tests]
