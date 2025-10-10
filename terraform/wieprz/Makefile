@@ -2,5 +2,4 @@
 
 %:
 	cd ~/homelab-public/ansible && \
-	ansible-playbook playbooks/$@.yml -l $@ \
-	$(if $(TAGS),--tags "$(TAGS)")
+	ansible-playbook playbooks/$@.yml -l $@ 
