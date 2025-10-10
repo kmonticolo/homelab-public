@@ -8,7 +8,6 @@ default.tfstate
 default.tfstate.backup
 telmate.log
 *.onnx
-terraform/modules/lxc_container/.terraform.lock.hcl
-terraform/wieprz/__pycache__/
-terraform/wieprz/terraform_sync.log
-
+*.lock.hcl
+*.log
+**/__pycache__/
