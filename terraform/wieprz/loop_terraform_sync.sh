@@ -4,7 +4,7 @@ cd /root/homelab-public/terraform/wieprz || exit 1
 
 current_hour=$(date +%H)
 
-if [ "$current_hour" -ge 19 ] && [ "$current_hour" -lt 22 ]; then
+if [ "$current_hour" -ge 17 ] && [ "$current_hour" -lt 20 ]; then
   exit 0
 else
 while true; do
