@@ -107,14 +107,6 @@ module "ansible_prometheus" {
   name         = "prometheus"
   container_id = module.prometheus.container_id
 }
-resource "null_resource" "ansible_prometheus" {
- triggers = {
-    container_id = module.prometheus.container_id
-  }
-  provisioner "local-exec" {
-    command = "make prometheus"
-  }
-}
 
 module "grafana" {
   source = "../modules/lxc_container"
@@ -157,14 +149,6 @@ module "ansible_vaultwarden" {
   source       = "../modules/ansible_runner"
   name         = "vaultwarden"
   container_id = module.vaultwarden.container_id
-}
-resource "null_resource" "ansible_vaultwarden" {
- triggers = {
-    container_id = module.vaultwarden.container_id
-  }
-  provisioner "local-exec" {
-    command = "make vaultwarden"
-  }
 }
 
 #module "dev" {
@@ -645,7 +629,6 @@ module "apt-cacher" {
   memory      = 256
   rootfs_storage = "local"
   rootfs_size = "5G"
-  rootfs_storage = "local-lvm"
   network_ip = "192.168.0.39/24"
   unprivileged = true
 }
