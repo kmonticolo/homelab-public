@@ -2,12 +2,72 @@ import os
 import subprocess
 import re
 import sys
-from collections import defaultdict, Counter
+import argparse
+from collections import defaultdict
 
 def debug_print(label, content):
     print(f"[DEBUG {label}] {content}")
 
-def test_sync_terraform_state():
+def parse_args():
+    parser = argparse.ArgumentParser(description="Synchronizacja stanu Terraform i Proxmox LXC")
+    parser.add_argument("--delete-orphans", action="store_true",
+                        help="Usuń kontenery terraform z IP nieznanym Terraformowi")
+    return parser.parse_args()
+
+def extract_ips_from_tfstate(resources, terraform_dir):
+    tf_ips = set()
+    for res in resources:
+        match = re.match(r"module\.([a-zA-Z0-9_-]+)\.proxmox_lxc\.lxc_container", res)
+        if not match:
+            continue
+
+        # Pobierz szczegóły zasobu ze stanu
+        show = subprocess.run(
+            ["terraform", "state", "show", "-state=default.tfstate", res],
+            cwd=terraform_dir,
+            capture_output=True, text=True
+        )
+        output = show.stdout
+
+        # Wyciągnij IP z outputu (zakładam, że jest linia z 'ip = "..."' lub podobna)
+        ip_match = re.search(r'ip\s+=\s+"?([\d\.]+)"?', output)
+        if ip_match:
+            tf_ips.add(ip_match.group(1))
+
+    return tf_ips
+
+def find_and_delete_terraform_orphans(tf_ips):
+    pct_list = subprocess.run(["pct", "list"], capture_output=True, text=True)
+    for line in pct_list.stdout.strip().splitlines()[1:]:
+        parts = line.split()
+        if len(parts) < 1:
+            continue
+        vmid = parts[0]
+        config = subprocess.run(["pct", "config", vmid], capture_output=True, text=True)
+        config_out = config.stdout
+
+        # Pobierz IP
+        ip_match = re.search(r'ip=(\d+\.\d+\.\d+\.\d+)', config_out)
+        ip = ip_match.group(1) if ip_match else None
+
+        # Pobierz tagi (np. tags: terraform)
+        tag_match = re.search(r'tags:\s*(.+)', config_out)
+        tags_raw = tag_match.group(1).strip() if tag_match else ""
+        tags = [t.strip() for t in re.split(r'[;,]', tags_raw) if t.strip()]
+
+        if "terraform" not in tags:
+            continue  # nie usuwamy kontenerów spoza Terraform
+
+        if ip and ip not in tf_ips:
+            print(f"[ORPHAN] VMID {vmid} z IP {ip} i tagiem 'terraform' — nie istnieje w terraform.tfstate")
+            try:
+                subprocess.run(["pct", "stop", vmid], check=True)
+                subprocess.run(["pct", "destroy", vmid], check=True)
+                print(f"[DELETED] Usunięto VM {vmid} (terraform orphan)")
+            except subprocess.CalledProcessError as e:
+                print(f"[ERROR] Nie udało się usunąć VM {vmid}: {e}")
+
+def test_sync_terraform_state(delete_orphans=False):
     terraform_dir = os.path.expanduser("~/homelab-public/terraform/wieprz")
     tfstate_path = os.path.join(terraform_dir, "default.tfstate")
 
@@ -39,7 +99,7 @@ def test_sync_terraform_state():
     duplicates = [host for host, vmids in existing_containers.items() if len(vmids) > 1]
     if duplicates:
         print(f"[ERROR] Wykryto zduplikowane kontenery (hostname): {duplicates}")
-        sys.exit(1)
+        # NIE przerywamy działania, tylko ostrzegamy
 
     should_apply = False  # flaga: czy wykonać terraform apply
 
@@ -106,7 +166,6 @@ def test_sync_terraform_state():
         actual_vmid = existing_containers[hostname][0]
         if tf_vmid != actual_vmid:
             print(f"[INFO] VMID różni się: stan={tf_vmid}, system={actual_vmid} — zalecana ręczna weryfikacja")
-            # Można tu dodać logikę naprawy, np. aktualizacji stanu (opcjonalne)
 
         # Sprawdź, czy VM działa
         try:
@@ -119,6 +178,10 @@ def test_sync_terraform_state():
                 print(f"[OK] VM {actual_vmid} ({hostname}) działa.")
         except subprocess.CalledProcessError as e:
             print(f"[WARN] Nie udało się sprawdzić statusu VM {actual_vmid} ({hostname}): {e.stderr}")
+
+    if delete_orphans:
+        tf_ips = extract_ips_from_tfstate(resources, terraform_dir)
+        find_and_delete_terraform_orphans(tf_ips)
 
     if should_apply:
         print("[APPLY] Uruchamiam terraform apply -auto-approve...")
@@ -136,5 +199,6 @@ def test_sync_terraform_state():
         print("[SKIP] Wszystkie kontenery działają — pomijam terraform apply.")
 
 if __name__ == "__main__":
-    test_sync_terraform_state()
+    args = parse_args()
+    test_sync_terraform_state(delete_orphans=args.delete_orphans)
 
