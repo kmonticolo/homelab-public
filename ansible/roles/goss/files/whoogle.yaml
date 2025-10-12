@@ -1,0 +1,81 @@
+file:
+    /etc/apt/detect-http-proxy:
+        exists: true
+        contents:
+            - 192.168.0.39:3142
+package:
+    cron:
+        installed: true
+        versions:
+            - 3.0pl1-162
+    promtail:
+        installed: true
+        versions:
+            - 3.5.3
+    unattended-upgrades:
+        installed: true
+        versions:
+            - 2.9.1+nmu3
+port:
+    tcp:5000:
+        listening: true
+        ip:
+            - 0.0.0.0
+    tcp6:9080:
+        listening: true
+        ip:
+            - '::'
+    tcp6:39125:
+        listening: true
+        ip:
+            - '::'
+    udp:34130:
+        listening: true
+        ip:
+            - 127.0.0.1
+service:
+    cron:
+        enabled: true
+        running: true
+    docker:
+        enabled: true
+        running: true
+    promtail:
+        enabled: true
+        running: true
+    unattended-upgrades:
+        enabled: true
+        running: true
+user:
+    promtail:
+        exists: true
+        uid: 103
+        gid: 65534
+        groups:
+            - docker
+            - nogroup
+            - systemd-journal
+        home: /nonexistent
+        shell: /bin/false
+group:
+    docker:
+        exists: true
+        gid: 996
+command:
+    docker inspect --format='{{`{{.State.Health.Status}}`}}' whoogle:
+        exit-status: 0
+        stdout:
+            - healthy
+        stderr: ""
+        timeout: 10000
+    docker ps|grep -q whoogle-search:
+        exit-status: 0
+        stdout: ""
+        stderr: ""
+        timeout: 10000
+process:
+    cron:
+        running: true
+    promtail:
+        running: true
+
