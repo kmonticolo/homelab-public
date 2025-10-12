@@ -25,14 +25,6 @@ port:
         listening: true
         ip:
             - '::'
-    tcp6:39125:
-        listening: true
-        ip:
-            - '::'
-    udp:34130:
-        listening: true
-        ip:
-            - 127.0.0.1
 service:
     cron:
         enabled: true
