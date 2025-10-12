@@ -41,10 +41,6 @@ port:
         listening: true
         ip:
             - '::'
-    tcp6:46067:
-        listening: true
-        ip:
-            - '::'
 service:
     apt-cacher-ng.service:
         enabled: true
