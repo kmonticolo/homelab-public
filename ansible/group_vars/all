@@ -1,6 +1,5 @@
 timezone: "Europe/Warsaw"
 locale: "en_US.UTF-8"
-
 ansible_domain: ".dom"
 grafana_agent_version: "0.44.2"
 
