@@ -41,7 +41,15 @@ port:
         listening: true
         ip:
             - '::'
+package:
+    ufw:
+        installed: true
+        versions:
+            - 0.36.2-1
 service:
+    ufw:
+        enabled: true
+        running: false
     apt-cacher-ng.service:
         enabled: true
         running: true
