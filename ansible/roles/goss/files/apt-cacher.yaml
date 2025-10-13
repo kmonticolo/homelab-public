@@ -75,3 +75,9 @@ command:
         stdout: ""
         stderr: ""
         timeout: 10000
+    ufw status:
+        exit-status: 0
+        stdout:
+            - 'Status: active'
+        stderr: ""
+        timeout: 10000
