@@ -3,10 +3,6 @@ port:
         listening: true
         ip:
             - '::'
-    tcp6:44349:
-        listening: true
-        ip:
-            - '::'
 service:
     docker:
         enabled: true
@@ -21,3 +17,9 @@ command:
         stdout: ""
         stderr: ""
         timeout: 10000
+    ip -6 addr show dev eth0 | grep -q inet6:
+        exit-status: 1
+        stdout: ""
+        stderr: ""
+        timeout: 10000
+
