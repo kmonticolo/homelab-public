@@ -4,6 +4,7 @@
 - hosts: apt-cacher
   roles:
     - apt_proxy
+    - ufw
 
     - security
     - security-updates

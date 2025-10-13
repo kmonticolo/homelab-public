@@ -1,0 +1,3 @@
+ufw_host_rules:
+  - { rule: allow, port: "3142", proto: tcp }
+

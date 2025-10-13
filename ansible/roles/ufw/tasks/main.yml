@@ -1,0 +1,23 @@
+- name: Ensure UFW is installed
+  ansible.builtin.apt:
+    name: ufw
+    state: present
+    update_cache: yes
+
+- name: Enable UFW
+  ansible.builtin.ufw:
+    state: enabled
+    policy: deny
+  when: ansible_facts.os_family == "Debian"
+
+- name: Set final merged ufw rules
+  ansible.builtin.set_fact:
+    ufw_merged_rules: "{{ ufw_common_rules | default([]) + ufw_host_rules | default([]) }}"
+
+- name: Add UFW rules
+  ansible.builtin.ufw:
+    rule: "{{ item.rule }}"
+    port: "{{ item.port }}"
+    proto: "{{ item.proto }}"
+  loop: "{{ ufw_merged_rules }}"
+
