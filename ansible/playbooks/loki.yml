@@ -1,4 +1,5 @@
 - import_playbook: set_host.yml
+- import_playbook: disable_ipv6.yml
 
 - hosts: loki
   roles:
@@ -11,5 +12,5 @@
     - loki
 
     - promtail
-    - goss
+    #- goss
 
