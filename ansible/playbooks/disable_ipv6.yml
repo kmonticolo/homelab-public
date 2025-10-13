@@ -1,0 +1,42 @@
+---
+- name: Disable IPv6
+  hosts: all
+  become: true
+  tasks:
+
+    - name: Disable IPv6  sysctl
+      ansible.builtin.sysctl:
+        name: "{{ item }}"
+        value: '1'
+        state: present
+        reload: yes
+      loop:
+        - net.ipv6.conf.all.disable_ipv6
+        - net.ipv6.conf.default.disable_ipv6
+        - net.ipv6.conf.lo.disable_ipv6
+
+    - name: Ensure entries are present /etc/sysctl.conf
+      ansible.builtin.lineinfile:
+        path: /etc/sysctl.conf
+        line: "{{ item }}"
+        state: present
+      loop:
+        - "net.ipv6.conf.all.disable_ipv6 = 1"
+        - "net.ipv6.conf.default.disable_ipv6 = 1"
+        - "net.ipv6.conf.lo.disable_ipv6 = 1"
+
+    - name: Restart networkd service
+      ansible.builtin.service:
+        name: systemd-networkd
+        state: restarted
+      when: ansible_service_mgr == 'systemd'
+
+    - name: Show IPv6 status 
+      ansible.builtin.shell: ip a | grep inet6 || true
+      register: ipv6_status
+      changed_when: false
+
+    - name: Debug – IPv6
+      ansible.builtin.debug:
+        var: ipv6_status.stdout_lines
+
