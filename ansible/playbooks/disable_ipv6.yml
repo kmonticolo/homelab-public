@@ -25,12 +25,6 @@
         - "net.ipv6.conf.default.disable_ipv6 = 1"
         - "net.ipv6.conf.lo.disable_ipv6 = 1"
 
-    - name: Restart networkd service
-      ansible.builtin.service:
-        name: systemd-networkd
-        state: restarted
-      when: ansible_service_mgr == 'systemd'
-
     - name: Show IPv6 status 
       ansible.builtin.shell: ip a | grep inet6 || true
       register: ipv6_status
@@ -40,3 +34,9 @@
       ansible.builtin.debug:
         var: ipv6_status.stdout_lines
 
+  handlers:
+    - name: Restart networkd service
+      ansible.builtin.service:
+        name: systemd-networkd
+        state: restarted
+      when: ansible_service_mgr == 'systemd'
