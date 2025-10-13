@@ -29,10 +29,6 @@ port:
         listening: true
         ip:
             - '::'
-    tcp6:25:
-        listening: true
-        ip:
-            - ::1
     tcp6:3142:
         listening: true
         ip:
@@ -49,7 +45,7 @@ package:
 service:
     ufw:
         enabled: true
-        running: false
+        running: true
     apt-cacher-ng.service:
         enabled: true
         running: true
