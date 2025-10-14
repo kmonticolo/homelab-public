@@ -1,9 +1,18 @@
-- name: Set IP of apt proxy
-  set_fact:
+- name: Set ansible_host to container IP
+  ansible.builtin.set_fact:
     apt_proxy_host: >-
-      {{ lookup('pipe', 'terraform -chdir=/root/homelab-public/terraform/wieprz output -json')
-         | from_json
-         | json_query('apt_cacher_ip.value') }}
+      {{
+        (hostvars['apt-cacher']['proxmox_net0']['ip'] | regex_replace('/.*', ''))
+        if ('proxmox_net0' in hostvars['apt-cacher'] and 'ip' in hostvars['apt-cacher']['proxmox_net0'])
+        else (
+          hostvars['apt-cacher']['proxmox_lxc_interfaces']
+          | selectattr('name', 'equalto', 'eth0')
+          | map(attribute='inet')
+          | list
+          | first
+          | regex_replace('/.*', '')
+        )
+      }}
 
 - name: Install detect-http-proxy
   ansible.builtin.template:

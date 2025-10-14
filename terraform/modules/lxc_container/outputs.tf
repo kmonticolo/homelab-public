@@ -5,6 +5,3 @@ output "container_id" {
 output "ip_address" {
   value = var.network_ip
 }
-
-
-
