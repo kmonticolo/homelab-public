@@ -1,23 +1,41 @@
----
-- name: Generate SSH config from dynamic inventory
-  hosts: all
+- name: Generate SSH config file
+  hosts: localhost
   gather_facts: false
   vars:
     ssh_config_path: "{{ lookup('env', 'HOME') + '/.ssh/config' }}"
   tasks:
-    - name: Collect host data
-      add_host:
-        name: "{{ inventory_hostname }}"
-        groups: ssh_hosts
-        ansible_host: "{{ ansible_host }}"
-    
-- name: Generate SSH config file
-  hosts: localhost
-  gather_facts: false
-  tasks:
+
+    - name: Build list of SSH hosts
+      set_fact:
+        ssh_hosts: "{{ ssh_hosts | default([]) + [ {
+          'name': host.inventory_hostname,
+          'ip': (
+            host.get('proxmox_net0', {}).get('ip', '') | regex_replace('/.*', '')
+          ) if (host.get('proxmox_net0', {}).get('ip', '') != '') else (
+            (
+              host.get('proxmox_lxc_interfaces', [])
+              | selectattr('name', 'equalto', 'eth0')
+              | map(attribute='inet')
+              | list
+              | first
+              | default('0.0.0.0')
+              | regex_replace('/.*', '')
+            )
+          )
+        } ] }}"
+      loop: "{{ groups['all'] | map('extract', hostvars) | list }}"
+      loop_control:
+        loop_var: host
+
+    - name: Debug result
+      debug:
+        var: ssh_hosts
+
     - name: Render SSH config
       template:
         src: "/root/homelab-public/ansible/roles/pve/templates/ssh_config.j2"
-        dest: "{{ lookup('env', 'HOME') + '/.ssh/config' }}"
+        dest: "{{ ssh_config_path }}"
         mode: '0600'
+      vars:
+        ssh_hosts: "{{ ssh_hosts }}"
 
