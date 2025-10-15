@@ -1,0 +1,23 @@
+---
+- name: Generate SSH config from dynamic inventory
+  hosts: all
+  gather_facts: false
+  vars:
+    ssh_config_path: "{{ lookup('env', 'HOME') + '/.ssh/config' }}"
+  tasks:
+    - name: Collect host data
+      add_host:
+        name: "{{ inventory_hostname }}"
+        groups: ssh_hosts
+        ansible_host: "{{ ansible_host }}"
+    
+- name: Generate SSH config file
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Render SSH config
+      template:
+        src: "/root/homelab-public/ansible/roles/pve/templates/ssh_config.j2"
+        dest: "{{ lookup('env', 'HOME') + '/.ssh/config' }}"
+        mode: '0600'
+
