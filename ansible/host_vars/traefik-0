@@ -1,2 +1,0 @@
-traefik_certificates_resolver: tailscale
-traefik_acme_email: tadeker@onet.pl

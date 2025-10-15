@@ -1,1 +1,16 @@
-traefik-0.yml
+- import_playbook: set_host.yml
+- import_playbook: disable_ipv6.yml
+
+- hosts:
+  - traefik-1
+  roles:
+    - apt_proxy
+
+    - security
+    - security-updates
+    #- tailscale
+
+    - docker
+    - traefik
+
+    - promtail

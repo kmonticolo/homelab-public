@@ -3,8 +3,6 @@
 
 - hosts:
   - traefik-0
-  - traefik-1
-  serial: 1
   roles:
     - apt_proxy
 
