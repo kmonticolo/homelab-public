@@ -8,6 +8,7 @@ default.tfstate
 default.tfstate.backup
 telmate.log
 <<<<<<< HEAD
+<<<<<<< HEAD
 *.onnx
 *.lock.hcl
 *.log
