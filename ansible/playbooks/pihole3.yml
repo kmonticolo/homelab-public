@@ -1,0 +1,16 @@
+- import_playbook: set_host.yml
+- import_playbook: disable_ipv6.yml
+
+- hosts: pihole3
+  roles:
+    - apt_proxy
+
+    - security
+    - security-updates
+
+    - docker
+    - pihole
+
+    - promtail
+
+    #- goss

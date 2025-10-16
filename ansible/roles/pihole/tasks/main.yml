@@ -1,0 +1,37 @@
+#- name: Create Pihole volumes
+  #community.docker.docker_volume:
+  #  volume_name: "{{ item }}"
+  #loop:
+  #  - adguard-conf
+  #  - adguard-work
+- name: Debuguj porty pihole
+  debug:
+    var: pihole_ports
+
+
+- name: Create container
+  community.docker.docker_container:
+    name: pihole
+    image: pihole/pihole:latest
+
+    #volumes:
+      #- adguard-work:/opt/adguardhome/work:rw
+
+    #labels:
+      #traefik.enable: "true"
+      #traefik.http.routers.adguard.rule: "Host(`adguard.{{ ansible_domain }}`)"
+      #traefik.http.routers.adguard.service: "adguard"
+      #traefik.http.services.adguard.loadbalancer.server.port: "3000"
+
+    ports: "{{ pihole_ports | default([]) }}"
+
+    networks: "{{ docker_networks }}"
+    comparisons: "{{ docker_comparisons }}"
+    image_name_mismatch: "{{ docker_image_name_mismatch }}"
+    state: "{{ docker_state }}"
+    restart_policy: "{{ docker_restart_policy }}"
+    pull: "{{ docker_pull }}"
+
+- name: Register Pihole container name
+  ansible.builtin.set_fact:
+    adguard_container_name: "pihole"
