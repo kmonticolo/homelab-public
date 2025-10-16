@@ -4,10 +4,6 @@
   #loop:
   #  - adguard-conf
   #  - adguard-work
-- name: Debuguj porty pihole
-  debug:
-    var: pihole_ports
-
 
 - name: Create container
   community.docker.docker_container:
