@@ -1,17 +1,19 @@
-#- name: Create Pihole volumes
-  #community.docker.docker_volume:
-  #  volume_name: "{{ item }}"
-  #loop:
-  #  - adguard-conf
-  #  - adguard-work
+- name: Create Pihole volumes
+  community.docker.docker_volume:
+    volume_name: "{{ item }}"
+  loop:
+    - pihole-conf
+    - dnsmasq
 
 - name: Create container
   community.docker.docker_container:
     name: pihole
     image: pihole/pihole:latest
 
-    #volumes:
-      #- adguard-work:/opt/adguardhome/work:rw
+    volumes:
+      - pihole-conf:/etc/pihole
+      - dnsmasq:/etc/dnsmasq.d
+
 
     #labels:
       #traefik.enable: "true"

@@ -9,7 +9,8 @@
     - security-updates
 
     - docker
-    - pihole
+    - role: pihole
+      tags: pihole
 
     - promtail
 
