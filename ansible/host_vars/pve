@@ -1,5 +1,3 @@
-locale: "en_US.UTF-8" 
-
 smartmontools_smartd_devices:
   - device: /dev/sda
     type: sat
@@ -8,4 +6,21 @@ smartmontools_smartd_devices:
   - device: /dev/nvme0n1
     type: nvme
 
+
+pve_nfs_exports:
+  - "/volume1/backup 192.168.0.0/24(rw,sync,no_subtree_check)"
+
+pve_mount_points:
+  - src: "192.168.1.230:/volume1/backup"
+    path: "/backup"
+    fstype: "nfs"
+    opts: "defaults"
+
+smartmontools_smartd_devices:
+  - device: /dev/sda
+    type: sat
+  - device: /dev/sdb
+    type: sat
+  - device: /dev/nvme0n1
+    type: nvme
 
