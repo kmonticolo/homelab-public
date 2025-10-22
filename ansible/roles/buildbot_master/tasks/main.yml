@@ -1,0 +1,19 @@
+- name: Install pip3
+  ansible.builtin.apt:
+    name: python3-pip
+
+- name: Install Buildbot with www and waterfall view
+  ansible.builtin.pip:
+    name:
+      - buildbot
+      - buildbot-www
+      - buildbot-waterfall-view
+      - buildbot-console_view
+      - buildbot-grid_view
+    executable: pip3
+    extra_args: --break-system-packages
+
+- name: buildbot create master
+  ansible.builtin.command:
+    cmd: buildbot create-master master
+    creates: /root/master

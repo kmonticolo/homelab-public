@@ -1,0 +1,3 @@
+ufw_common_rules:
+  - { rule: allow, port: "8010", proto: tcp }
+

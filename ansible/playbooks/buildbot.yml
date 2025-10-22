@@ -1,0 +1,14 @@
+- import_playbook: set_host.yml
+- import_playbook: disable_ipv6.yml
+
+- hosts: buildbot
+  roles:
+    - apt_proxy
+    - ufw
+
+    - security
+    - security-updates
+
+    - buildbot_master
+
+    - promtail
