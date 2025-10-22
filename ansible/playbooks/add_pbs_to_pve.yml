@@ -1,0 +1,50 @@
+- name: Connect to PBS and add it as storage on PVE
+  hosts: pve
+  become: true
+  vars:
+    pbs_host: 192.168.0.90  # Adres IP PBS
+    pbs_user: "root@pam"
+    pbs_password: "Pajdo123"
+    pbs_storage_id: "pbs-backup"  # Nazwa, jak będzie widoczna w `pvesm`
+
+  tasks:
+
+    - name: Fetch PBS certificate fingerprint
+      delegate_to: "{{ pbs_host }}"
+      command: openssl x509 -in /etc/proxmox-backup/proxy.pem -noout -fingerprint -sha256
+      register: cert_fingerprint
+
+    - name: Extract SHA256 fingerprint (without colons)
+      set_fact:
+        pbs_fingerprint: "{{ cert_fingerprint.stdout | regex_search('SHA256 Fingerprint=(.*)', '\\1') | replace(':', '') }}"
+
+    - name: Fetch PBS datastore config
+      delegate_to: "{{ pbs_host }}"
+      slurp:
+        src: /etc/proxmox-backup/datastore.cfg
+      register: datastore_cfg
+
+    - name: Extract datastore name from config
+      set_fact:
+        pbs_datastore: >-
+          {{ (datastore_cfg.content | b64decode).splitlines()
+              | select('match', '^name\\s*=') | map('regex_replace', '^name\\s*=\\s*', '') | list | first }}
+
+    - name: Fail if datastore or fingerprint is missing
+      fail:
+        msg: "Missing PBS datastore or fingerprint"
+      when: pbs_datastore is not defined or pbs_fingerprint is not defined
+
+    - name: Add PBS storage to PVE
+      command: >
+        pvesm add pbs {{ pbs_storage_id }}
+        --server {{ pbs_host }}
+        --datastore {{ pbs_datastore }}
+        --fingerprint {{ pbs_fingerprint }}
+        --username {{ pbs_user }}
+        --password {{ pbs_password }}
+        --content backup
+        --nodes pve
+      register: pvesm_add_result
+      changed_when: "'already exists' not in pvesm_add_result.stderr"
+

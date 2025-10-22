@@ -1,0 +1,17 @@
+- name: Create Rundeck container
+  community.docker.docker_container:
+    name: rundeck
+    image: rundeck/rundeck:SNAPSHOT
+
+    ports: "{{ rundeck_ports | default([]) }}"
+
+    networks: "{{ docker_networks }}"
+    comparisons: "{{ docker_comparisons }}"
+    image_name_mismatch: "{{ docker_image_name_mismatch }}"
+    state: "{{ docker_state }}"
+    restart_policy: "{{ docker_restart_policy }}"
+    pull: "{{ docker_pull }}"
+
+- name: Register Rundeck container name
+  ansible.builtin.set_fact:
+    adguard_container_name: "rundeck"

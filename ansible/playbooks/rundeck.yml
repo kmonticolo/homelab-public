@@ -1,0 +1,16 @@
+- import_playbook: set_host.yml
+- import_playbook: disable_ipv6.yml
+
+- hosts: rundeck
+  roles:
+    - apt_proxy
+
+    - security
+    - security-updates
+
+    - docker
+    - rundeck
+
+    - promtail
+
+    #- goss
