@@ -1,0 +1,24 @@
+# This file is maintained automatically by "terraform init".
+# Manual edits may be lost in future updates.
+
+provider "registry.terraform.io/iolave/pihole" {
+  version = "0.2.2"
+  hashes = [
+    "h1:gLBQV7IHYgxBgmBJZnE2LYoGn/oG9lOfzq8RNrSb9qc=",
+    "zh:27c369ac0155a5cccc82d3d85cde6cab014bdfb90acecd2aa37e20ab18b52711",
+    "zh:2aa6e4f99fa05b2cf4033c9518e365d289edf32386e3b54f92b680ddebe243b1",
+    "zh:3144c8402c950d4a28821e48524700eefd738b61716d3243987dfced1502efb9",
+    "zh:41821783e54d1d08cc565b6c5af63979922c8426fc6cb34e5dd49e3f01682881",
+    "zh:5b7bd8b1dfc0bf8387a77aa5dd806c248459e9462ec6cf65254cdd1b8977d646",
+    "zh:692d0bf88bacfaf27e3d5755538702d9b09aaa4ea27621016629074163bbfd34",
+    "zh:6ba8b28ca787fd674d102354361019f53b60cc215953c7d5e39d366b9f6045bd",
+    "zh:6eac39ef0bbfd999100b5d9bba76177f52d03c7c5696fc702542325eb98990cc",
+    "zh:73e0263e9652223e050b49657d5a4b613dad6885fb131db863cfc9c3cff86d94",
+    "zh:890df766e9b839623b1f0437355032a3c006226a6c200cd911e15ee1a9014e9f",
+    "zh:affe4d01e8d7213f565d56b8b981d1671922f01492ce45a987031097f1b105bd",
+    "zh:d0a9a4bd9fc16dd6195b1d1179ea17e074965c3c345b80e4532ba18ea281c93f",
+    "zh:e640651a1a872b1034222dea6ae84835f9b97be98c5b5c96e2ddcea37f0efab7",
+    "zh:f7e1cdd4e6951c33d801fdd15474bb82cc668ed960878e3c8b2fb05f9241b63a",
+    "zh:f855f223b55b5d00d5212224be657d95d6f85ef1296637a09d5a177b4e544e21",
+  ]
+}

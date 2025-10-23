@@ -22,6 +22,7 @@
       #traefik.http.services.adguard.loadbalancer.server.port: "3000"
 
     ports: "{{ pihole_ports | default([]) }}"
+    env: "{{ pihole_vars | default({}) }}"
 
     networks: "{{ docker_networks }}"
     comparisons: "{{ docker_comparisons }}"

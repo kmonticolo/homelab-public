@@ -617,25 +617,6 @@ module "buildbot" {
 #  name         = "buildbot"
 #  container_id = module.buildbot.container_id
 #}
-module "buildbot" {
-  source = "../modules/lxc_container"
-  ostemplate = local.default_ostemplate
-  target_node = "pve"
-  hostname    = "buildbot"
-  password        = var.default_password
-  ssh_public_keys = local.default_ssh_public_keys
-  cores       = 1
-  memory      = 256
-  rootfs_storage = "local"
-  rootfs_size = "3G"
-  network_ip = "192.168.0.4/24"
-  unprivileged = true
-}
-#module "ansible_buildbot" {
-#  source       = "../modules/ansible_runner"
-#  name         = "buildbot"
-#  container_id = module.buildbot.container_id
-#}
 
 module "apt-cacher" {
   source = "../modules/lxc_container"
