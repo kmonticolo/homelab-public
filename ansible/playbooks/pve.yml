@@ -1,4 +1,4 @@
-- hosts: pve
+- hosts: pve,wtr
   serial: 1
   roles:
     - pve
