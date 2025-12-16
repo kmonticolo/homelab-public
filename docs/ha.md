@@ -1,7 +1,10 @@
 # Home Assistant
 
+## Automations
+
+* Solar & HVAC energy management <https://github.com/mkuthan/home-assistant-appdaemon>
+* Solar energy management v1 <https://github.com/mkuthan/home-assistant-appdaemon>
 * CCTV, heating, lighting and more automations <https://mkuthan.github.io/blog/2024/12/08/home-assistant-automations/>
-* Solar energy management automations <https://mkuthan.github.io/blog/2025/04/12/home-assistant-solar/>
 
 ## Integrations
 
@@ -26,9 +29,9 @@
 * [Moon](https://www.home-assistant.io/integrations/moon)
 * [MQTT](https://www.home-assistant.io/integrations/mqtt)
 * [Proximity](https://www.home-assistant.io/integrations/proximity)
-* [PSE RCE Integration](https://github.com/robertugo2/ha_rce/)
 * [Radio Browser](https://www.home-assistant.io/integrations/radio_browser)
 * [Risco](https://www.home-assistant.io/integrations/risco)
+* [Rynkowa Cena Energii](https://github.com/Lewa-Reka/ha-rce-pse)
 * [Season](https://www.home-assistant.io/integrations/season)
 * [Shelly](https://www.home-assistant.io/integrations/shelly)
 * [SMLIGHT](https://www.home-assistant.io/integrations/smlight)
@@ -37,12 +40,11 @@
 * [Solis Inverter](https://github.com/hultenvp/solis-sensor/)
 * [Spook](https://spook.boo/)
 * [Sun](https://www.home-assistant.io/integrations/sun)
-* [TP-Link Omada](https://www.home-assistant.io/integrations/tplink_omada)
 * [Universal Media Player](https://www.home-assistant.io/integrations/universal)
 * [WebRTC Camera](https://github.com/AlexxIT/WebRTC)
 * [Wyoming Protocol](https://www.home-assistant.io/integrations/wyoming)
 
-Unused integrations:
+Retired integrations:
 
 * [Aquarea Smart Cloud](https://github.com/cjaliaga/home-assistant-aquarea)
 * [ENTSO-e](https://github.com/JaccoR/hass-entso-e)
@@ -51,9 +53,12 @@ Unused integrations:
 * [PrusaLink](https://www.home-assistant.io/integrations/prusalink)
 * [RESTful](https://www.home-assistant.io/integrations/rest)
 * [Retry](https://github.com/amitfin/retry)
+* [TP-Link Omada](https://www.home-assistant.io/integrations/tplink_omada)
+
 
 ## Add-ons
 
+* AppDaemon
 * Studio Code Server
 * Music Assistant Server (unused)
 * Open Wake World
