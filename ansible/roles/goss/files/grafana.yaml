@@ -1,4 +1,8 @@
 port:
+    tcp:3000:
+        listening: true
+        ip:
+            - 0.0.0.0
     tcp6:9080:
         listening: true
         ip:
@@ -12,6 +16,12 @@ group:
         exists: true
         gid: 996
 command:
+    docker inspect grafana|grep -i status:
+        exit-status: 0
+        stdout:
+            - '"Status": "running",'
+        stderr: ""
+        timeout: 10000
     docker ps |grep -q grafana:latest:
         exit-status: 0
         stdout: ""
@@ -22,4 +32,12 @@ command:
         stdout: ""
         stderr: ""
         timeout: 10000
-
+http:
+  http://localhost:3000/api/health:
+    status: 200
+    timeout: 5000
+    allow-insecure: false
+    no-follow-redirects: false
+    body:
+      - '"database": "ok"'
+      - '"version": "12.3.0"'
