@@ -74,6 +74,12 @@ service:
         enabled: true
         running: true
 command:
+    'curl -sI http://localhost:3142/debian/dists/bookworm/Release | grep -q "Server: Debian Apt-Cacher NG"':
+        exit-status: 0
+        stdout: ""
+        stderr: ""
+        timeout: 10000
+
     ip -6 addr show dev eth0 | grep -q inet6:
         exit-status: 1
         stdout: ""
