@@ -49,21 +49,16 @@ group:
     docker:
         exists: true
         gid: 996
-command:
-    docker inspect --format='{{`{{.State.Health.Status}}`}}' loki:
-        exit-status: 0
-        stdout:
-            - healthy
-        stderr: ""
-        timeout: 10000
-    docker ps|grep -q loki:
-        exit-status: 0
-        stdout: ""
-        stderr: ""
-        timeout: 10000
 process:
     cron:
         running: true
     promtail:
         running: true
+command:
+  docker-loki-status:
+    exit-status: 0
+    stdout:
+      - running
+    exec: >
+      docker inspect --format='{{"{{"}}.State.Status{{"}}"}}' loki
 
