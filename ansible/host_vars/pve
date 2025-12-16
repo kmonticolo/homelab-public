@@ -6,6 +6,9 @@ smartmontools_smartd_devices:
   - device: /dev/nvme0n1
     type: nvme
 
+pve_packages:
+  - lxc-pve
+  - apg
 
 pve_nfs_exports:
   - "/volume1/backup 192.168.0.0/24(rw,sync,no_subtree_check)"
