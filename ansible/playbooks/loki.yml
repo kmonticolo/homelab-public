@@ -12,5 +12,5 @@
     - loki
 
     - promtail
-    #- goss
+    - goss
 
