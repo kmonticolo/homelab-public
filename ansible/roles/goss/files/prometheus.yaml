@@ -30,12 +30,6 @@ service:
     apt-daily.service:
         enabled: true
         running: false
-    container-getty@.service:
-        enabled: true
-        running: false
-    containerd.service:
-        enabled: true
-        running: true
     cron.service:
         enabled: true
         running: true

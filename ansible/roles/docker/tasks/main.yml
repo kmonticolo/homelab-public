@@ -26,7 +26,6 @@
   loop:
     - docker-ce
     #- docker-ce-cli
-    #- containerd.io
 
 - name: Create Docker network
   community.docker.docker_network:
