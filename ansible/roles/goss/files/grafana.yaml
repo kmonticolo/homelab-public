@@ -1,3 +1,9 @@
+
+package:
+    promtail:
+        installed: true
+        versions:
+            - 3.6.3
 port:
     tcp:3000:
         listening: true
@@ -11,6 +17,20 @@ service:
     docker:
         enabled: true
         running: true
+    promtail:
+        enabled: true
+        running: true
+user:
+    promtail:
+        exists: true
+        uid: 103
+        gid: 65534
+        groups:
+            - docker
+            - nogroup
+            - systemd-journal
+        home: /nonexistent
+        shell: /bin/false
 group:
     docker:
         exists: true
@@ -32,11 +52,14 @@ command:
         stdout: ""
         stderr: ""
         timeout: 10000
+process:
+    promtail:
+        running: true
 http:
-  http://localhost:3000/api/health:
-    status: 200
-    timeout: 5000
-    allow-insecure: false
-    no-follow-redirects: false
-    body:
-      - '"database": "ok"'
+    http://localhost:3000/api/health:
+        status: 200
+        allow-insecure: false
+        no-follow-redirects: false
+        timeout: 5000
+        body:
+            - '"database": "ok"'
