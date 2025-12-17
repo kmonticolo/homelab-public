@@ -3,13 +3,19 @@
 
 - hosts: grafana
   roles:
-    - apt_proxy
+    - role: apt_proxy
+      tags: proxy
 
-    - security
-    - security-updates
+    - role: security
+      tags: security
+    - role: security-updates
+      tags: security
 
-    - docker
-    - grafana
+    - role: docker
+    - role: grafana
+      tags: grafana
 
-    - promtail
-    - goss
+    - role: promtail
+      tags: promtail
+    - role: goss
+      tags: [goss, tests]
