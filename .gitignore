@@ -1,4 +1,5 @@
 .envrc
+terraform/wieprz/.terraform.lock.hcl
 .terraform
 .vault
 *.tfbackend
