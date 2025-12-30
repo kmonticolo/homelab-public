@@ -1,94 +1,123 @@
-# https://github.com/Telmate/terraform-provider-proxmox/blob/master/docs/resources/lxc.md
+# =========================
+# Basic
+# =========================
 
 variable "ostemplate" {
-  type = string
+  description = "Nazwa template VM z cloud-init w Proxmox"
+  type        = string
 }
 
 variable "target_node" {
-  type = string
+  description = "Node Proxmox, na którym powstanie VM"
+  type        = string
 }
 
 variable "hostname" {
-  type = string
+  description = "Nazwa VM"
+  type        = string
 }
 
 variable "tags" {
-  type    = list(string)
-  default = []
+  description = "Tagi Proxmox"
+  type        = list(string)
+  default     = []
 }
 
+# =========================
+# Resources
+# =========================
+
 variable "cores" {
-  type    = number
-  default = 2
+  description = "Liczba vCPU"
+  type        = number
+  default     = 2
 }
 
 variable "memory" {
-  type    = string
-  default = "1024"
+  description = "RAM w MB"
+  type        = number
+  default     = 1024
 }
 
-variable "swap" {
-  type    = string
-  default = "512"
-}
+# =========================
+# Start / boot
+# =========================
 
 variable "onboot" {
-  type    = bool
-  default = true
+  description = "Autostart VM"
+  type        = bool
+  default     = true
 }
 
 variable "start" {
-  type    = bool
-  default = true
+  description = "Uruchom VM po stworzeniu"
+  type        = bool
+  default     = true
 }
 
+# =========================
+# Cloud-init auth
+# =========================
+
 variable "password" {
-  type      = string
-  sensitive = true
+  description = "Hasło użytkownika cloud-init"
+  type        = string
+  sensitive   = true
 }
 
 variable "ssh_public_keys" {
-  type    = string
-  default = null
+  description = "Publiczne klucze SSH (cloud-init)"
+  type        = string
+  default     = null
 }
 
 variable "nameserver" {
-  type    = string
-  default = "192.168.0.11"
+  description = "DNS dla VM"
+  type        = string
+  default     = "192.168.0.11"
 }
 
-variable "network_name" {
-  type    = string
-  default = "eth0"
-}
+# =========================
+# Network
+# =========================
 
 variable "network_bridge" {
-  type    = string
-  default = "vmbr0"
+  description = "Bridge Proxmox"
+  type        = string
+  default     = "vmbr0"
 }
 
 variable "network_ip" {
-  type    = string
-  default = "dhcp"
+  description = "Adres IP (dhcp lub CIDR, np. 192.168.0.82/24)"
+  type        = string
+  default     = "dhcp"
 }
 
 variable "network_gw" {
-  type    = string
-  default = "192.168.0.1"
+  description = "Gateway (tylko dla statycznego IP)"
+  type        = string
+  default     = "192.168.0.1"
 }
 
 variable "network_tag" {
-  type    = string
-  default = null
+  description = "VLAN tag (opcjonalnie)"
+  type        = number
+  default     = null
 }
 
+# =========================
+# Disk
+# =========================
+
 variable "rootfs_storage" {
-  type    = string
-  default = "local"
+  description = "Storage Proxmox"
+  type        = string
+  default     = "local"
 }
 
 variable "rootfs_size" {
-  type    = string
-  default = "5G"
+  description = "Rozmiar dysku root"
+  type        = string
+  default     = "5G"
 }
 

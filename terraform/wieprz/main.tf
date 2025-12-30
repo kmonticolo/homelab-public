@@ -696,4 +696,9 @@ resource "proxmox_vm_qemu" "haproxy3" {
     id   = 0
     type = "socket"
   }
+  lifecycle {
+    ignore_changes = [
+      startup_shutdown
+    ]
+  }
 }

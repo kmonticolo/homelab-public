@@ -8,42 +8,48 @@ terraform {
 }
 
 resource "proxmox_vm_qemu" "vm_qemu" {
-  #ostemplate = var.ostemplate
-
+  # --- Podstawowe ---
+  name        = var.hostname
   target_node = var.target_node
-  hostname    = var.hostname
+  os_type     = "cloud-init"
 
   tags = join(",", concat(var.tags, ["terraform"]))
 
+  # --- Zasoby ---
   cores  = var.cores
   memory = var.memory
-  swap   = var.swap
 
-  #unprivileged = var.unprivileged
-
+  # --- Start ---
   onboot = var.onboot
   start  = var.start
 
-  password        = var.password
-  ssh_public_keys = var.ssh_public_keys
-
+  # --- Cloud-init ---
   nameserver = var.nameserver
 
+  ciuser     = "root"
+  cipassword = var.password
+  sshkeys    = var.ssh_public_keys
+
+  # --- Sieć (interfejs) ---
   network {
-    name   = var.network_name
+    model  = "virtio"
     bridge = var.network_bridge
-    ip     = var.network_ip
-    gw     = var.network_gw
     tag    = var.network_tag
   }
 
+  # --- IP (cloud-init) ---
+  ipconfig0 = var.network_ip == "dhcp"
+    ? "ip=dhcp"
+    : "ip=${var.network_ip},gw=${var.network_gw}"
+
+  # --- Dysk ---
   rootfs {
     storage = var.rootfs_storage
     size    = var.rootfs_size
   }
 
+  # --- Lifecycle ---
   lifecycle {
-    #ignore_changes = [ostemplate, target_node, hastate]
     ignore_changes = [target_node, hastate]
   }
 }
