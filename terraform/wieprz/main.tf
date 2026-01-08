@@ -464,7 +464,7 @@ module "searxng" {
 
   cores  = 1
   memory = 312
-  rootfs_size = "2G"
+  rootfs_size = "3G"
 
   network_ip = "192.168.0.40/24"
 
