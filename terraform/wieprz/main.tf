@@ -626,7 +626,7 @@ module "apt-cacher" {
   password        = var.default_password
   ssh_public_keys = local.default_ssh_public_keys
   cores       = 1
-  memory      = 256
+  memory      = 356
   rootfs_storage = "local"
   rootfs_size = "5G"
   network_ip = "192.168.0.39/24"
