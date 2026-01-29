@@ -36,7 +36,8 @@ provider "proxmox" {
 
 locals {
   #default_ostemplate      = "usb1:vztmpl/debian-12-standard_12.7-1_amd64.tar.zst"
-  default_ostemplate      = "/var/lib/vz/template/cache/debian-12-standard_12.7-1_amd64.tar.zst"
+  #default_ostemplate      = "/var/lib/vz/template/cache/debian-12-standard_12.7-1_amd64.tar.zst"
+  default_ostemplate      = "/var/lib/vz/template/cache/debian-12-standard_12.12-1_amd64.tar.zst"
   #default_ostemplate      = "/var/lib/vz/template/cache/debian-13-standard_13.1-2_amd64.tar.zst"
   default_ssh_public_keys = file("${path.module}/../ssh_public_keys")
 }
@@ -637,29 +638,6 @@ module "ansible_apt-cacher" {
   name         = "apt-cacher"
   container_id = module.apt-cacher.container_id
 }
-/*
-module "haproxy" {
-  source = "../modules/vm_qemu"
-  ostemplate = 67001
-  target_node = "pve"
-  hostname    = "haproxy"
-  password        = var.default_password
-  ssh_public_keys = local.default_ssh_public_keys
-  cores       = 1
-  memory      = 512
-  #rootfs_size = "2G"
-  rootfs_storage = "local-lvm"
-  #rootfs_storage = "local"
-  network_ip = "192.168.0.55/24"
-  network_gw = "192.168.0.1"
-  network_bridge = "vmbr0"
-}
-resource "proxmox_vm_qemu" "haproxy1" {
-  name        = "haproxy1"
-  target_node = "pve"
-  clone = "openbsd7-tmpl"
-}
-*/
 
 resource "proxmox_vm_qemu" "haproxy3" {
   name        = "obsd78haproxy3"
