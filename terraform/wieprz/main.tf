@@ -35,10 +35,7 @@ provider "proxmox" {
 }
 
 locals {
-  #default_ostemplate      = "usb1:vztmpl/debian-12-standard_12.7-1_amd64.tar.zst"
-  #default_ostemplate      = "/var/lib/vz/template/cache/debian-12-standard_12.7-1_amd64.tar.zst"
   default_ostemplate      = "/var/lib/vz/template/cache/debian-12-standard_12.12-1_amd64.tar.zst"
-  #default_ostemplate      = "/var/lib/vz/template/cache/debian-13-standard_13.1-2_amd64.tar.zst"
   default_ssh_public_keys = file("${path.module}/../ssh_public_keys")
 }
 
